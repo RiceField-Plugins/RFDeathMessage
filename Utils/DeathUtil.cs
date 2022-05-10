@@ -55,7 +55,7 @@ namespace RFDeathMessage.Utils
                             ChatHelper.Say(receiver.Player, deathMessage, Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
                             break;
                         case EDisplay.GROUP:
-                            if (victim.quests.groupID.m_SteamID == receiver.Player.Player.quests.groupID.m_SteamID)
+                            if (victim.quests.groupID.m_SteamID != 0 && victim.quests.groupID.m_SteamID == receiver.Player.Player.quests.groupID.m_SteamID)
                                 ChatHelper.Say(receiver.Player, deathMessage, Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
                             
                             break;
