@@ -1,6 +1,5 @@
 using RFDeathMessage.Enums;
 using RFDeathMessage.Utils;
-using RFRocketLibrary.Helpers;
 using SDG.Unturned;
 using Steamworks;
 
@@ -10,13 +9,16 @@ namespace RFDeathMessage.EventListeners
     {
         internal static void OnDied(PlayerLife sender, EDeathCause cause, ELimb limb, CSteamID instigator)
         {
+            var deathmessage = string.Empty;
             if (Plugin.Conf.EnableLocationMessage)
-                ChatHelper.Broadcast(
-                    DeathUtil.TranslateRich("DEATH_LOCATION", sender.channel.owner.playerID.characterName,
-                        DeathUtil.GetLocation(sender)), Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
-            
+                deathmessage += Plugin.TranslateRich("DEATH_LOCATION", sender.channel.owner.playerID.characterName,
+                        DeathUtil.GetLocation(sender) + " ");
+
             if (!Plugin.Conf.DeathCauses.Contains(cause))
+            {
+                DeathUtil.SendDeathMessage(deathmessage, sender.player);
                 return;
+            }
 
             switch (cause)
             {
@@ -43,10 +45,9 @@ namespace RFDeathMessage.EventListeners
                 case EDeathCause.VEHICLE:
                 case EDeathCause.WATER:
                 case EDeathCause.ZOMBIE:
-                    ChatHelper.Broadcast(
-                        DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
-                            sender.channel.owner.playerID.characterName),
-                        Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                    deathmessage +=
+                        Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            sender.channel.owner.playerID.characterName);
                     break;
                 case EDeathCause.CHARGE:
                 case EDeathCause.GRENADE:
@@ -55,19 +56,17 @@ namespace RFDeathMessage.EventListeners
                     switch (Plugin.Conf.Mode)
                     {
                         case EMode.DETAIL:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     sender.channel.owner.playerID.characterName,
                                     killer.channel.owner.playerID.characterName, killer.life.health,
-                                    DeathUtil.GetDistance(sender, killer)),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    DeathUtil.GetDistance(sender, killer));
                             break;
                         case EMode.SIMPLE:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     sender.channel.owner.playerID.characterName,
-                                    killer.channel.owner.playerID.characterName),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    killer.channel.owner.playerID.characterName);
                             break;
                     }
 
@@ -77,20 +76,18 @@ namespace RFDeathMessage.EventListeners
                     switch (Plugin.Conf.Mode)
                     {
                         case EMode.DETAIL:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     killer.channel.owner.playerID.characterName, killer.life.health,
                                     sender.channel.owner.playerID.characterName,
                                     DeathUtil.GetLimb(limb), killer.equipment.asset.itemName,
-                                    DeathUtil.GetDistance(sender, killer)),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    DeathUtil.GetDistance(sender, killer));
                             break;
                         case EMode.SIMPLE:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     killer.channel.owner.playerID.characterName, killer.equipment.asset.itemName,
-                                    DeathUtil.GetLimb(limb), sender.channel.owner.playerID.characterName),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    DeathUtil.GetLimb(limb), sender.channel.owner.playerID.characterName);
                             break;
                     }
 
@@ -100,19 +97,17 @@ namespace RFDeathMessage.EventListeners
                     switch (Plugin.Conf.Mode)
                     {
                         case EMode.DETAIL:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     killer.channel.owner.playerID.characterName, killer.life.health,
                                     sender.channel.owner.playerID.characterName,
-                                    DeathUtil.GetLimb(limb), killer.equipment.asset.itemName),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    DeathUtil.GetLimb(limb), killer.equipment.asset.itemName);
                             break;
                         case EMode.SIMPLE:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     killer.channel.owner.playerID.characterName, killer.equipment.asset.itemName,
-                                    DeathUtil.GetLimb(limb), sender.channel.owner.playerID.characterName),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    DeathUtil.GetLimb(limb), sender.channel.owner.playerID.characterName);
                             break;
                     }
 
@@ -122,19 +117,17 @@ namespace RFDeathMessage.EventListeners
                     switch (Plugin.Conf.Mode)
                     {
                         case EMode.DETAIL:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     killer.channel.owner.playerID.characterName, killer.life.health,
                                     sender.channel.owner.playerID.characterName,
-                                    DeathUtil.GetLimb(limb)),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    DeathUtil.GetLimb(limb));
                             break;
                         case EMode.SIMPLE:
-                            ChatHelper.Broadcast(
+                            deathmessage +=
                                 DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     killer.channel.owner.playerID.characterName, DeathUtil.GetLimb(limb),
-                                    sender.channel.owner.playerID.characterName),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    sender.channel.owner.playerID.characterName);
                             break;
                     }
 
@@ -144,24 +137,24 @@ namespace RFDeathMessage.EventListeners
                     switch (Plugin.Conf.Mode)
                     {
                         case EMode.DETAIL:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     sender.channel.owner.playerID.characterName,
                                     killer.channel.owner.playerID.characterName, killer.life.health,
-                                    DeathUtil.GetLimb(limb)),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    DeathUtil.GetLimb(limb));
                             break;
                         case EMode.SIMPLE:
-                            ChatHelper.Broadcast(
-                                DeathUtil.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
+                            deathmessage +=
+                                Plugin.TranslateRich($"DEATH_CAUSE_{cause}_{Plugin.Conf.Mode}",
                                     killer.channel.owner.playerID.characterName,
-                                    sender.channel.owner.playerID.characterName),
-                                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                                    sender.channel.owner.playerID.characterName);
                             break;
                     }
 
                     break;
             }
+            
+            DeathUtil.SendDeathMessage(deathmessage, sender.player);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using RFDeathMessage.Enums;
 using RFDeathMessage.EventListeners;
-using RFRocketLibrary.Events;
 using Rocket.API.Collections;
 using Rocket.Core.Plugins;
 using Rocket.Unturned.Chat;
@@ -13,8 +12,8 @@ namespace RFDeathMessage
     public class Plugin : RocketPlugin<Configuration>
     {
         private static int Major = 1;
-        private static int Minor = 0;
-        private static int Patch = 0;
+        private static int Minor = 1;
+        private static int Patch = 1;
         
         public static Plugin Inst;
         public static Configuration Conf;
@@ -42,6 +41,8 @@ namespace RFDeathMessage
         {
             if (Conf.Enabled)
             {
+                StopAllCoroutines();
+                
                 PlayerLife.onPlayerDied -= PlayerEvent.OnDied;
             }
             
@@ -116,6 +117,13 @@ namespace RFDeathMessage
             {$"{EResponse.DEATH_CAUSE_ZOMBIE_SIMPLE}", "[ZOMBIE] {0}"},
             
             {$"{EResponse.DEATH_LOCATION}", "{0} died near {1}!"},
+            {$"{EResponse.INVALID_PARAMETER}", "Invalid parameter! Usage: {0}"},
+            {$"{EResponse.SET_DISPLAY}", "Successfully set death message display mode to {0}!"},
         };
+
+        internal static string TranslateRich(object s, params object[] objects)
+        {
+            return Inst.Translate(s.ToString(), objects).Replace("-=", "<").Replace("=-", ">");
+        }
     }
 }

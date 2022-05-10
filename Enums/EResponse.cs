@@ -64,6 +64,8 @@ namespace RFDeathMessage.Enums
         DEATH_CAUSE_WATER_SIMPLE,
         DEATH_CAUSE_ZOMBIE_SIMPLE,
         
-        DEATH_LOCATION
+        DEATH_LOCATION,
+        INVALID_PARAMETER,
+        SET_DISPLAY
     }
 }

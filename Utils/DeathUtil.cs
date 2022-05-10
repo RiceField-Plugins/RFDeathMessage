@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Linq;
 using RFDeathMessage.Enums;
+using RFRocketLibrary.Helpers;
 using SDG.Unturned;
 using UnityEngine;
 
@@ -38,6 +40,31 @@ namespace RFDeathMessage.Utils
         internal static string TranslateRich(string s, params object[] objects)
         {
             return Plugin.Inst.Translate(s, objects).Replace("-=", "<").Replace("=-", ">");
+        }
+
+        internal static void SendDeathMessage(string deathMessage, Player victim)
+        {
+            IEnumerator DeathMessageEnumerator()
+            {
+                foreach (var steamPlayer in Provider.clients)
+                {
+                    var receiver = steamPlayer.player.GetComponent<PlayerComponent>();
+                    switch (receiver.DisplayMode)
+                    {
+                        case EDisplay.GLOBAL:
+                            ChatHelper.Say(receiver.Player, deathMessage, Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                            break;
+                        case EDisplay.GROUP:
+                            if (victim.quests.groupID.m_SteamID == receiver.Player.Player.quests.groupID.m_SteamID)
+                                ChatHelper.Say(receiver.Player, deathMessage, Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
+                            
+                            break;
+                    }
+                    yield return null;
+                }
+            }
+
+            Plugin.Inst.StartCoroutine(DeathMessageEnumerator());
         }
     }
 }
