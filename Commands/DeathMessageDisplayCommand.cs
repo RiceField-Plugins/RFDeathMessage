@@ -38,7 +38,7 @@ namespace RFDeathMessage.Commands
             }
 
             Invalid:
-            await context.ReplyAsync(RFDeathMessage.Plugin.TranslateRich(EResponse.INVALID_PARAMETER),
+            await context.ReplyAsync(RFDeathMessage.Plugin.TranslateRich(EResponse.INVALID_PARAMETER, Syntax),
                 RFDeathMessage.Plugin.MsgColor, RFDeathMessage.Plugin.Conf.MessageIconUrl);
         }
     }
