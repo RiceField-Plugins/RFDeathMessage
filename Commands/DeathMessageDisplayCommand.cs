@@ -14,7 +14,7 @@ namespace RFDeathMessage.Commands
     {
         public override async Task Execute(CommandContext context)
         {
-            if (context.CommandRawArguments.Length == 1)
+            if (context.CommandRawArguments.Length != 1)
                 goto Invalid;
 
             switch (context.CommandRawArguments[0].ToLower())

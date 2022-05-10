@@ -1,6 +1,7 @@
 ﻿using RFDeathMessage.Enums;
 using RFDeathMessage.EventListeners;
 using Rocket.API.Collections;
+using Rocket.API.Extensions;
 using Rocket.Core.Plugins;
 using Rocket.Unturned.Chat;
 using SDG.Unturned;
@@ -28,6 +29,10 @@ namespace RFDeathMessage
                 MsgColor = UnturnedChat.GetColorFromName(Conf.MessageColor, Color.green);
 
                 PlayerLife.onPlayerDied += PlayerEvent.OnDied;
+                
+                if (Level.isLoaded)
+                    foreach (var steamPlayer in Provider.clients)
+                        steamPlayer.player.gameObject.TryAddComponent<PlayerComponent>()?.LoadInternal();
             }
             else
                 Logger.LogWarning($"[{Name}] Plugin: DISABLED");
