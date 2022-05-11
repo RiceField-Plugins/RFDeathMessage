@@ -11,6 +11,7 @@ namespace RFDeathMessage
         public string MessageColor;
         public string MessageIconUrl;
         public EMode Mode;
+        public EDisplay DefaultDisplay;
         public bool EnableLocationMessage;
         public HashSet<EDeathCause> DeathCauses;
 
@@ -20,6 +21,7 @@ namespace RFDeathMessage
             MessageColor = "green";
             MessageIconUrl = "https://cdn.jsdelivr.net/gh/RiceField-Plugins/UnturnedImages@images/plugin/Announcer.png";
             Mode = EMode.DETAIL;
+            DefaultDisplay = EDisplay.GLOBAL;
             EnableLocationMessage = true;
             DeathCauses = new HashSet<EDeathCause>
             {

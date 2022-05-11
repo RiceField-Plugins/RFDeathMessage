@@ -12,7 +12,7 @@ namespace RFDeathMessage
         }
         internal void LoadInternal()
         {
-            DisplayMode = EDisplay.GROUP;
+            DisplayMode = Plugin.Conf.DefaultDisplay;
         }
 
         protected override void Unload()

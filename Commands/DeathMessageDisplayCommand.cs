@@ -1,45 +1,46 @@
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using RFDeathMessage.Enums;
+using RFRocketLibrary.Helpers;
 using Rocket.API;
-using RocketExtensions.Models;
-using RocketExtensions.Plugins;
+using Rocket.Unturned.Player;
 
 namespace RFDeathMessage.Commands
 {
-    [CommandActor(AllowedCaller.Player)]
-    [CommandAliases("dmdisplay")]
-    [CommandInfo("Sets death message display option", "/dmdisplay <global|group>")]
-    [CommandPermissions("deathmessagedisplay")]
-    public class DeathMessageDisplayCommand : RocketCommand
+    public class DeathMessageDisplayCommand : IRocketCommand
     {
-        public override async Task Execute(CommandContext context)
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
+        public string Name => "deathmessagedisplay";
+        public string Help => "Sets death message display option";
+        public string Syntax => "/dmdisplay <global|group>";
+        public List<string> Aliases => new List<string> {"dmdisplay"};
+        public List<string> Permissions => new List<string> {"deathmessagedisplay"};
+
+        public void Execute(IRocketPlayer caller, string[] command)
         {
-            if (context.CommandRawArguments.Length != 1)
+            if (command.Length != 1)
                 goto Invalid;
 
-            switch (context.CommandRawArguments[0].ToLower())
+            switch (command[0].ToLower())
             {
                 case "global":
-                    var component = context.UnturnedPlayer.GetComponent<PlayerComponent>();
+                    var component = ((UnturnedPlayer) caller).GetComponent<PlayerComponent>();
                     component.DisplayMode = EDisplay.GLOBAL;
-                    await context.ReplyAsync(
-                        RFDeathMessage.Plugin.TranslateRich(EResponse.SET_DISPLAY, component.DisplayMode),
-                        RFDeathMessage.Plugin.MsgColor, RFDeathMessage.Plugin.Conf.MessageIconUrl);
+                    ChatHelper.Say(caller, Plugin.TranslateRich(EResponse.SET_DISPLAY, component.DisplayMode),
+                        Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
                     return;
                 case "group":
-                    component = context.UnturnedPlayer.GetComponent<PlayerComponent>();
+                    component = ((UnturnedPlayer) caller).GetComponent<PlayerComponent>();
                     component.DisplayMode = EDisplay.GROUP;
-                    await context.ReplyAsync(
-                        RFDeathMessage.Plugin.TranslateRich(EResponse.SET_DISPLAY, component.DisplayMode),
-                        RFDeathMessage.Plugin.MsgColor, RFDeathMessage.Plugin.Conf.MessageIconUrl);
+                    ChatHelper.Say(caller, Plugin.TranslateRich(EResponse.SET_DISPLAY, component.DisplayMode),
+                        Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
                     return;
                 default:
                     goto Invalid;
             }
 
             Invalid:
-            await context.ReplyAsync(RFDeathMessage.Plugin.TranslateRich(EResponse.INVALID_PARAMETER, Syntax),
-                RFDeathMessage.Plugin.MsgColor, RFDeathMessage.Plugin.Conf.MessageIconUrl);
+            ChatHelper.Say(caller, Plugin.TranslateRich(EResponse.INVALID_PARAMETER, Syntax),
+                Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
         }
     }
 }

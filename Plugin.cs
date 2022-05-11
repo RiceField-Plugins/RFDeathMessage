@@ -14,7 +14,7 @@ namespace RFDeathMessage
     {
         private static int Major = 1;
         private static int Minor = 1;
-        private static int Patch = 1;
+        private static int Patch = 3;
         
         public static Plugin Inst;
         public static Configuration Conf;
@@ -116,7 +116,7 @@ namespace RFDeathMessage
             {$"{EResponse.DEATH_CAUSE_SPARK_SIMPLE}", "[SPARK] {0}"},
             {$"{EResponse.DEATH_CAUSE_SPIT_SIMPLE}", "[SPIT] {0}"},
             {$"{EResponse.DEATH_CAUSE_SPLASH_SIMPLE}", "[SPLASH] {0}"},
-            {$"{EResponse.DEATH_CAUSE_SUICIDE_SIMPLE}", "[SPLASH] {0}"},
+            {$"{EResponse.DEATH_CAUSE_SUICIDE_SIMPLE}", "[SUICIDE] {0}"},
             {$"{EResponse.DEATH_CAUSE_VEHICLE_SIMPLE}", "[VEHICLE] {0}"},
             {$"{EResponse.DEATH_CAUSE_WATER_SIMPLE}", "[WATER] {0}"},
             {$"{EResponse.DEATH_CAUSE_ZOMBIE_SIMPLE}", "[ZOMBIE] {0}"},

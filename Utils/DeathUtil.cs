@@ -42,7 +42,7 @@ namespace RFDeathMessage.Utils
             return Plugin.Inst.Translate(s, objects).Replace("-=", "<").Replace("=-", ">");
         }
 
-        internal static void SendDeathMessage(string deathMessage, Player victim)
+        internal static void SendDeathMessage(string deathMessage, Player victim, object killer = null)
         {
             IEnumerator DeathMessageEnumerator()
             {
@@ -55,11 +55,14 @@ namespace RFDeathMessage.Utils
                             ChatHelper.Say(receiver.Player, deathMessage, Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
                             break;
                         case EDisplay.GROUP:
-                            if (victim.quests.groupID.m_SteamID != 0 && victim.quests.groupID.m_SteamID == receiver.Player.Player.quests.groupID.m_SteamID)
-                                ChatHelper.Say(receiver.Player, deathMessage, Plugin.MsgColor, Plugin.Conf.MessageIconUrl);
-                            
+                            if ((victim.quests.groupID.m_SteamID != 0 && victim.quests.groupID.m_SteamID == receiver.Player.Player.quests.groupID.m_SteamID) || 
+                                (killer is Player killerPlayer && killerPlayer.quests.groupID.m_SteamID == receiver.Player.Player.quests.groupID.m_SteamID))
+                                ChatHelper.Say(receiver.Player, deathMessage, Plugin.MsgColor,
+                                    Plugin.Conf.MessageIconUrl);
+
                             break;
                     }
+
                     yield return null;
                 }
             }

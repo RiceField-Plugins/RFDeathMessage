@@ -10,16 +10,19 @@ namespace RFDeathMessage.EventListeners
         internal static void OnDied(PlayerLife sender, EDeathCause cause, ELimb limb, CSteamID instigator)
         {
             var deathmessage = string.Empty;
-            if (Plugin.Conf.EnableLocationMessage)
-                deathmessage += Plugin.TranslateRich("DEATH_LOCATION", sender.channel.owner.playerID.characterName,
-                        DeathUtil.GetLocation(sender)) + " ";
 
             if (!Plugin.Conf.DeathCauses.Contains(cause))
             {
-                DeathUtil.SendDeathMessage(deathmessage, sender.player);
+                if (Plugin.Conf.EnableLocationMessage)
+                {
+                    deathmessage += Plugin.TranslateRich("DEATH_LOCATION", sender.channel.owner.playerID.characterName,
+                        DeathUtil.GetLocation(sender));
+                    DeathUtil.SendDeathMessage(deathmessage, sender.player);
+                }
                 return;
             }
 
+            var killer = PlayerTool.getPlayer(instigator);
             switch (cause)
             {
                 case EDeathCause.ACID:
@@ -52,7 +55,7 @@ namespace RFDeathMessage.EventListeners
                 case EDeathCause.CHARGE:
                 case EDeathCause.GRENADE:
                 case EDeathCause.MISSILE:
-                    var killer = PlayerTool.getPlayer(instigator);
+                    killer = PlayerTool.getPlayer(instigator);
                     switch (Plugin.Conf.Mode)
                     {
                         case EMode.DETAIL:
@@ -153,8 +156,12 @@ namespace RFDeathMessage.EventListeners
 
                     break;
             }
-            
-            DeathUtil.SendDeathMessage(deathmessage, sender.player);
+
+            if (Plugin.Conf.EnableLocationMessage)
+                deathmessage += " " + Plugin.TranslateRich("DEATH_LOCATION", sender.channel.owner.playerID.characterName,
+                    DeathUtil.GetLocation(sender));
+
+            DeathUtil.SendDeathMessage(deathmessage, sender.player, killer);
         }
     }
 }
